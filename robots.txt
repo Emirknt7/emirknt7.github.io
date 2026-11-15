@@ -1,0 +1,6 @@
+
+User-agent: *
+Allow: /
+
+Sitemap: https://emirkanat.com.tr/sitemap.xml
+
