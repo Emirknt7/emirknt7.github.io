@@ -2,7 +2,7 @@
 <html lang="tr">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>FPV 3D Montaj — 9" Deadcat Build</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
@@ -18,6 +18,9 @@
   html,body{margin:0;height:100%;overflow:hidden;background:var(--bg);color:var(--ink);font-family:var(--disp)}
   canvas{display:block}
   #app{position:fixed;inset:0}
+  #app canvas{touch-action:none; -webkit-user-select:none;user-select:none}
+  button,input{font:inherit}
+  button:focus-visible,.pitem:focus-visible{outline:3px solid var(--cyan);outline-offset:3px}
   .overlay{position:fixed;pointer-events:none;z-index:10}
   .panel{pointer-events:auto;background:var(--panel);backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:14px;box-shadow:0 6px 24px rgba(20,40,50,.08)}
 
@@ -67,6 +70,106 @@
   #loading{position:fixed;inset:0;display:grid;place-items:center;z-index:50;background:var(--bg);transition:opacity .6s}
   #loading .l{font-family:var(--mono);font-size:12px;color:var(--muted);letter-spacing:2px}
   #loading .l span{color:var(--cyan)}
+
+  /* ----- Mobil telefon / tablet düzeni ----- */
+  #mobileNav,#sheetBackdrop,.sheet-close,.touch-hint{display:none}
+
+  @media (max-width:800px){
+    #top{
+      top:calc(10px + env(safe-area-inset-top, 0px));
+      left:10px;right:10px;gap:8px;align-items:flex-start;
+    }
+    .brand{padding:9px 11px;font-size:12px;border-radius:12px}
+    .brand small{font-size:9px}
+    .pill{padding:10px 8px;font-size:9px;text-align:right;border-radius:12px}
+    #mobileNav{
+      position:fixed;
+      z-index:35;
+      display:grid;grid-template-columns:1fr 1fr;
+      gap:10px;
+      left:12px;right:12px;
+      bottom:calc(10px + env(safe-area-inset-bottom, 0px));
+      padding:8px;
+      background:rgba(255,255,255,.94);
+      border:1px solid var(--line);
+      border-radius:16px;
+      box-shadow:0 8px 35px rgba(18,34,44,.18);
+      backdrop-filter:blur(12px);
+      -webkit-backdrop-filter:blur(12px);
+    }
+    #mobileNav button{
+      min-height:48px;cursor:pointer;
+      border-radius:11px;border:1px solid rgba(20,40,50,.14);
+      background:#f6f9fa;color:var(--ink);
+      font-family:var(--mono);font-size:13px;font-weight:700;
+      touch-action:manipulation;
+    }
+    #mobileNav button[aria-expanded="true"]{
+      border-color:var(--cyan);background:#dff8f5;color:#08766e;
+    }
+    #sheetBackdrop:not([hidden]){
+      position:fixed;inset:0;z-index:24;
+      display:block;background:rgba(8,18,26,.32);
+    }
+    #tools,#parts{
+      display:none;
+      position:fixed;
+      top:auto;left:12px;right:12px;
+      bottom:calc(82px + env(safe-area-inset-bottom, 0px));
+      width:auto;
+      max-height:min(64dvh, 500px);
+      overflow-y:auto;overscroll-behavior:contain;
+      padding:16px;
+      z-index:30;
+      background:#f9fbfc;
+      box-shadow:0 18px 60px rgba(8,18,26,.25);
+      -webkit-overflow-scrolling:touch;
+    }
+    #tools.is-mobile-open,#parts.is-mobile-open{display:block;pointer-events:auto}
+    #tools h3,#parts h3{font-size:12px;margin:2px 42px 16px 4px}
+    #tools .seg{gap:10px;margin-bottom:12px}
+    #tools .seg button{min-height:44px;font-size:12px}
+    #tools input[type=range]{height:34px}
+    #parts .pitem{min-height:48px;padding:9px 10px;touch-action:manipulation}
+    #parts .pitem .n{font-size:13px}
+    #parts .pitem .m{font-size:11px;margin-top:3px}
+    #parts .pitem .eye{min-width:38px;min-height:38px;display:grid;place-items:center;font-size:20px}
+    .sheet-close{
+      display:grid;place-items:center;
+      position:absolute;top:10px;right:10px;width:35px;height:35px;
+      padding:0;border-radius:9px;border:1px solid var(--line);
+      background:white;color:var(--ink);font-size:23px;cursor:pointer;
+    }
+    .hintline{display:none}
+    .touch-hint{display:block;font-size:11px;line-height:1.7;color:var(--muted);margin:12px 4px 2px}
+    #bottom{
+      left:10px;right:10px;
+      bottom:calc(87px + env(safe-area-inset-bottom, 0px));
+      gap:8px;align-items:flex-end;
+    }
+    #sel{padding:9px 11px;min-width:0;min-height:54px;max-width:min(65vw,310px)}
+    #sel .t{font-size:9px;margin-bottom:4px}
+    #sel .nm{font-size:11px;line-height:1.3}
+    #sel .mt{font-size:9px}
+    #sel .none{font-size:10px}
+    #stats{margin-left:auto;padding:8px 10px}
+    #stats .s{display:flex;flex-direction:column;gap:1px;font-size:10px;white-space:nowrap}
+    #stats b{font-size:12px}
+    body.mobile-panel-open #bottom{visibility:hidden}
+  }
+
+  @media (max-width:410px){
+    #top .pill{display:none}
+    .brand{font-size:11px}
+    .brand small{font-size:8px}
+    #tools,#parts{max-height:62dvh}
+  }
+
+  @media (max-width:800px) and (max-height:500px){
+    #bottom{display:none}
+    #tools,#parts{max-height:calc(100dvh - 100px)}
+    #mobileNav{left:auto;width:min(330px,70vw)}
+  }
 </style>
 <script type="importmap">
 { "imports":{
@@ -85,7 +188,8 @@
   <div class="panel pill">GEP-F722 · 9" Deadcat · <b>6S</b></div>
 </div>
 
-<div class="overlay panel" id="tools">
+<div class="overlay panel" id="tools" aria-label="Simülasyon araçları">
+  <button type="button" class="sheet-close" data-close-panel aria-label="Araçları kapat">×</button>
   <h3>Araçlar</h3>
   <div class="seg">
     <button class="b on" id="mTranslate">Taşı</button>
@@ -106,9 +210,19 @@
     Seç: <kbd>parçaya tık</kbd> · Taşı: <kbd>ok gizmo</kbd><br>
     Gizle: sağdaki <kbd>●</kbd> · <kbd>G</kbd>/<kbd>R</kbd> mod
   </div>
+  <p class="touch-hint">Tek parmakla modeli döndür · İki parmakla yakınlaş veya kaydır · Bir parçaya dokunarak seç</p>
 </div>
 
-<div class="overlay panel" id="parts"><h3>Parçalar</h3><div id="plist"></div></div>
+<div class="overlay panel" id="parts" aria-label="Drone parçaları">
+  <button type="button" class="sheet-close" data-close-panel aria-label="Parçaları kapat">×</button>
+  <h3>Parçalar</h3><div id="plist"></div>
+</div>
+
+<div id="sheetBackdrop" hidden></div>
+<nav id="mobileNav" aria-label="Mobil simülasyon menüsü">
+  <button type="button" id="mobileToolsBtn" aria-controls="tools" aria-expanded="false">⚙ Araçlar</button>
+  <button type="button" id="mobilePartsBtn" aria-controls="parts" aria-expanded="false">◫ Parçalar</button>
+</nav>
 
 <div class="overlay" id="bottom">
   <div class="panel" id="sel"><div class="t">Seçili parça</div><div class="none" id="selNone">Bir parçaya tıkla…</div>
@@ -126,33 +240,43 @@ import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 
 /* ---------- renderer / scene ---------- */
 const app=document.getElementById('app');
+const compactScreen=matchMedia('(max-width:800px)').matches;
 const renderer=new THREE.WebGLRenderer({antialias:true});
 renderer.setSize(innerWidth,innerHeight);
-renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+renderer.setPixelRatio(Math.min(devicePixelRatio,compactScreen?1.4:2));
+renderer.domElement.style.touchAction='none';
 renderer.shadowMap.enabled=true; renderer.shadowMap.type=THREE.PCFSoftShadowMap;
 renderer.toneMapping=THREE.ACESFilmicToneMapping; renderer.toneMappingExposure=1.0;
 app.appendChild(renderer.domElement);
 
 const scene=new THREE.Scene();
 scene.background=new THREE.Color(0xf3f5f6);
-scene.fog=new THREE.Fog(0xf3f5f6, 95, 230);
+scene.fog=new THREE.Fog(0xf3f5f6, 95, compactScreen?330:230);
 
 // environment reflections (makes metals/plastics read clearly)
 const pmrem=new THREE.PMREMGenerator(renderer);
 scene.environment=pmrem.fromScene(new RoomEnvironment(),0.04).texture;
 
 const camera=new THREE.PerspectiveCamera(45,innerWidth/innerHeight,0.1,500);
-const HOME_CAM=new THREE.Vector3(34,27,42);
+function getHomeCamera(){
+  // Dikey telefonlarda drone modelini kadraja sığdır.
+  const aspect=innerWidth/Math.max(innerHeight,1);
+  const scale=aspect<0.9?Math.min(3.4,Math.max(1.1,1.18/aspect)):1;
+  return new THREE.Vector3(34,27,42).multiplyScalar(scale);
+}
+let HOME_CAM=getHomeCamera();
 camera.position.copy(HOME_CAM);
 
 const orbit=new OrbitControls(camera,renderer.domElement);
 orbit.enableDamping=true; orbit.dampingFactor=.08; orbit.target.set(0,3,0);
-orbit.minDistance=14; orbit.maxDistance=130;
+orbit.minDistance=14; orbit.maxDistance=230;
+orbit.touches.ONE=THREE.TOUCH.ROTATE;
+orbit.touches.TWO=THREE.TOUCH.DOLLY_PAN;
 
 /* ---------- lights ---------- */
 scene.add(new THREE.HemisphereLight(0xffffff,0xd6dde0,.5));
 const key=new THREE.DirectionalLight(0xffffff,2.0); key.position.set(26,42,22);
-key.castShadow=true; key.shadow.mapSize.set(2048,2048);
+key.castShadow=true; key.shadow.mapSize.set(compactScreen?1024:2048,compactScreen?1024:2048);
 key.shadow.camera.near=1; key.shadow.camera.far=150;
 key.shadow.camera.left=-46;key.shadow.camera.right=46;key.shadow.camera.top=46;key.shadow.camera.bottom=-46;
 key.shadow.bias=-0.0004; scene.add(key);
@@ -419,6 +543,33 @@ function updateStats(){let m=0,c=0;groups.forEach(g=>{if(g.obj.visible){m+=g.mas
   document.getElementById('pCnt').textContent=c;}
 updateStats();
 
+/* ---------- mobil açılır kontrol panelleri ---------- */
+const mobileButtons={tools:document.getElementById('mobileToolsBtn'),parts:document.getElementById('mobilePartsBtn')};
+const panelBackdrop=document.getElementById('sheetBackdrop');
+function closeMobilePanels(){
+  for(const id of ['tools','parts']){
+    document.getElementById(id).classList.remove('is-mobile-open');
+    mobileButtons[id].setAttribute('aria-expanded','false');
+  }
+  panelBackdrop.hidden=true;
+  document.body.classList.remove('mobile-panel-open');
+}
+function toggleMobilePanel(id){
+  const wasOpen=document.getElementById(id).classList.contains('is-mobile-open');
+  closeMobilePanels();
+  if(!wasOpen){
+    document.getElementById(id).classList.add('is-mobile-open');
+    mobileButtons[id].setAttribute('aria-expanded','true');
+    panelBackdrop.hidden=false;
+    document.body.classList.add('mobile-panel-open');
+  }
+}
+mobileButtons.tools.addEventListener('click',()=>toggleMobilePanel('tools'));
+mobileButtons.parts.addEventListener('click',()=>toggleMobilePanel('parts'));
+panelBackdrop.addEventListener('click',closeMobilePanels);
+document.querySelectorAll('[data-close-panel]').forEach(b=>b.addEventListener('click',closeMobilePanels));
+addEventListener('keydown',e=>{if(e.key==='Escape')closeMobilePanels();});
+
 /* ---------- UI ---------- */
 const mT=document.getElementById('mTranslate'),mR=document.getElementById('mRotate');
 mT.onclick=()=>{transform.setMode('translate');mT.classList.add('on');mR.classList.remove('on');};
@@ -434,7 +585,16 @@ explInput.oninput=()=>{const f=explInput.value/100;document.getElementById('expl
   groups.forEach(g=>{g.obj.position.set(g.home.x+g.expl.x*f,g.home.y+g.expl.y*f,g.home.z+g.expl.z*f);});
   if(selected)transform.attach(selected);};
 addEventListener('keydown',e=>{if(e.key==='g'||e.key==='G')mT.click();if(e.key==='r'||e.key==='R')mR.click();if(e.key==='Escape')deselect();});
-addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);});
+addEventListener('resize',()=>{
+  const aspect=innerWidth/Math.max(innerHeight,1);
+  const changedOrientation=Math.abs(aspect-camera.aspect)>.35;
+  camera.aspect=aspect;
+  camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth,innerHeight);
+  renderer.setPixelRatio(Math.min(devicePixelRatio,matchMedia('(max-width:800px)').matches?1.4:2));
+  if(changedOrientation){HOME_CAM=getHomeCamera();camera.position.copy(HOME_CAM);orbit.target.set(0,3,0);}
+  if(innerWidth>800)closeMobilePanels();
+});
 function loop(){requestAnimationFrame(loop);orbit.update();renderer.render(scene,camera);}
 loop();
 setTimeout(()=>{const l=document.getElementById('loading');l.style.opacity=0;setTimeout(()=>l.remove(),600);},450);
